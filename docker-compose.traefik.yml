@@ -49,6 +49,7 @@ services:
       - /var/run:/var/run
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/kmsg:/dev/kmsg
     deploy:
       mode: global
       resources:
@@ -101,7 +102,7 @@ services:
         - traefik.http.services.swarmprom-grafana.loadbalancer.server.port=3000
 
   alertmanager:
-    image: stefanprodan/swarmprom-alertmanager:v0.14.0
+    image: prom/alertmanager:v0.23.0
     networks:
       - default
       - net
@@ -142,7 +143,7 @@ services:
         - traefik.http.routers.swarmprom-alertmanager-https.middlewares=swarmprom-alertmanager-auth
 
   unsee:
-    image: cloudflare/unsee:v0.8.0
+    image: cloudflare/unsee:v0.9.2
     networks:
       - default
       - net
@@ -168,7 +169,7 @@ services:
         - traefik.http.routers.swarmprom-unsee-https.middlewares=swarmprom-unsee-auth
 
   node-exporter:
-    image: stefanprodan/swarmprom-node-exporter:v0.16.0
+    image: prom/node-exporter:v0.18.1
     networks:
       - net
     environment:
@@ -193,7 +194,7 @@ services:
           memory: 64M
 
   prometheus:
-    image: stefanprodan/swarmprom-prometheus:v2.5.0
+    image: prom/prometheus:v2.32.1
     networks:
       - default
       - net
